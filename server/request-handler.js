@@ -13,8 +13,8 @@ this file and include it in basic-server.js so that it actually works.
 **************************************************************/
   var dataObj = {
     results: [],
-    username: ''
   };
+ 
 
 exports.requestHandler = function(request, response) {
   // Request and Response come from node's http module.
@@ -31,9 +31,6 @@ exports.requestHandler = function(request, response) {
   // Adding more logging to your server can be an easy way to get passive
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
-  var messages = [];
-
-  console.log(messages);
 
   // The outgoing status.
   var statusCode = 200;
@@ -68,15 +65,17 @@ exports.requestHandler = function(request, response) {
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
     response.end(JSON.stringify(dataObj));
-  } else if ( request.method === 'POST' ) {
+  }
+
+   else if ( request.method === 'POST' ) {
     console.log("Serving request type " + request.method + " for url " + request.url);
     statusCode = 201;
     
     request.on('data', function(chunk){
       console.log("Received body data:");
       console.log(chunk.toString())
-      messages.push(JSON.parse(chunk))
-      console.log(messages)
+      dataObj.results.push(JSON.parse(chunk))
+      console.log(dataObj.results)
 
     });
 
