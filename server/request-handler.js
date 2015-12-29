@@ -1,3 +1,5 @@
+var fs = require('fs');
+var path = require('path');
 /*************************************************************
 
 You should implement your request handler function in this file.
@@ -17,6 +19,14 @@ this file and include it in basic-server.js so that it actually works.
  
 
 exports.requestHandler = function(request, response) {
+  var content = '';
+  var fileName = path.basename(request.url);
+  var parentFolder = process.cwd()
+  var localFolder = parentFolder + '/client';
+
+
+
+
   // Request and Response come from node's http module.
   //
   // They include information about both the incoming request, such as
@@ -42,21 +52,34 @@ exports.requestHandler = function(request, response) {
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = "application/json";
+  headers['Content-Type'] = "text/html";
     console.log(request.url)
   
-  if(request.url !== "/classes/room1" && request.url !== "/classes/messages" && request.url !== "/classes/room") {
-    console.log(request.url)
-    statusCode = 404;
-    response.writeHead(statusCode, headers);
-    response.end();
+  // if(request.url !== "/classes/room1" && request.url !== "/classes/messages" && request.url !== "/classes/room") {
+  //   console.log(request.url)
+  //   statusCode = 404;
+  //   response.writeHead(statusCode, headers);
+  //   response.end();
+  // } else 
 
-  } else if ( request.method === 'GET' ) {
+  if ( request.method === 'GET' ) {
+
     console.log("Serving request type " + request.method + " for url " + request.url);
     
+    content = localFolder + '/index.html'
+    
+    response.writeHead(statusCode, headers);
+    
+    fs.readFile(content, function(err, contents){
+      if(!err){
+      console.log("this is the localFolder name******* ", contents);
+        response.end(contents)
+      } else {
+        console.dir(err);
+      } 
+    });
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
-    response.writeHead(statusCode, headers);
   // Make sure to always call response.end() - Node may not send
   // anything back to the client until you do. The string you pass to
   // response.end() will be the body of the response - i.e. what shows
@@ -64,17 +87,15 @@ exports.requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-    response.end(JSON.stringify(dataObj));
-  }
-
-   else if ( request.method === 'POST' ) {
+    // response.end(JSON.stringify(dataObj));
+  } else if ( request.method === 'POST' ) {
     console.log("Serving request type " + request.method + " for url " + request.url);
     statusCode = 201;
     
     request.on('data', function(chunk){
       console.log("Received body data:");
-      console.log(chunk.toString())
-      dataObj.results.push(JSON.parse(chunk))
+      // console.log(chunk.toString())
+      // dataObj.results.push(JSON.parse(chunk))
       console.log(dataObj.results)
 
     });
@@ -83,8 +104,7 @@ exports.requestHandler = function(request, response) {
       response.writeHead(statusCode, headers);
       response.end("Post Received")
     })
-
-  } 
+  }
 
 };
 
