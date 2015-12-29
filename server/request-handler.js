@@ -12,7 +12,8 @@ this file and include it in basic-server.js so that it actually works.
 
 **************************************************************/
   var dataObj = {
-    results: []
+    results: [],
+    username: ''
   };
 
 exports.requestHandler = function(request, response) {
@@ -30,7 +31,9 @@ exports.requestHandler = function(request, response) {
   // Adding more logging to your server can be an easy way to get passive
   // debugging help, but you should always be careful about leaving stray
   // console.logs in your code.
-  
+  var messages = [];
+
+  console.log(messages);
 
   // The outgoing status.
   var statusCode = 200;
@@ -43,8 +46,15 @@ exports.requestHandler = function(request, response) {
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
   headers['Content-Type'] = "application/json";
+    console.log(request.url)
+  
+  if(request.url !== "/classes/room1" && request.url !== "/classes/messages" && request.url !== "/classes/room") {
+    console.log(request.url)
+    statusCode = 404;
+    response.writeHead(statusCode, headers);
+    response.end();
 
-  if ( request.method === 'GET' ) {
+  } else if ( request.method === 'GET' ) {
     console.log("Serving request type " + request.method + " for url " + request.url);
     
   // .writeHead() writes to the request line and headers of the response,
@@ -65,6 +75,9 @@ exports.requestHandler = function(request, response) {
     request.on('data', function(chunk){
       console.log("Received body data:");
       console.log(chunk.toString())
+      messages.push(JSON.parse(chunk))
+      console.log(messages)
+
     });
 
     request.on('end', function (){
@@ -72,11 +85,7 @@ exports.requestHandler = function(request, response) {
       response.end("Post Received")
     })
 
-  } else {
-    statusCode = 404;
-    response.writeHead(statusCode, headers);
-    response.end();
-  }
+  } 
 
 };
 
