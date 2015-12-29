@@ -8,7 +8,7 @@ $(function() {
   app = {
 //TODO: The current 'addFriend' function just adds the class 'friend'
 //to all messages sent by the user
-    server: 'https://api.parse.com/1/classes/chatterbox/',
+    server: 'http://127.0.0.1:3000/',
     username: 'anonymous',
     roomname: 'lobby',
     lastMessageId: 0,
@@ -35,7 +35,7 @@ $(function() {
       app.fetch(false);
 
       // Poll for new messages
-      setInterval(app.fetch, 3000);
+      // setInterval(app.fetch, 3000);
     },
     send: function(data) {
       app.startSpinner();
@@ -63,7 +63,7 @@ $(function() {
         url: app.server,
         type: 'GET',
         contentType: 'application/json',
-        data: { order: '-createdAt'},
+        data: {},
         success: function(data) {
           console.log('chatterbox: Messages fetched');
 
