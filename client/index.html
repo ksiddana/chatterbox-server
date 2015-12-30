@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="styles/styles.css">
 
     <!-- dependencies -->
+    <script src="bower_components/underscore/underscore-min.js"></script>
     <script src="bower_components/jquery/jquery.min.js"></script>
 
-    <script src="bower_components/underscore/underscore-min.js"></script>
-    <script src="bower_components/backbone/backbone.js"></script>
+    <!-- // <script src="bower_components/backbone/backbone.js"></script> -->
         <!-- your scripts -->
     <!-- // <script src="env/config.js"></script> -->
     <script src="scripts/chatterbox.js"></script>
@@ -31,8 +31,8 @@
       </div>
 
       <form action="#" id="send" method="post">
-        <input type="text" id="message" value="Send a Message"/>
-        <input type="submit" name="submit" class="submit"/>
+        <input type="text" id="message" value="Send a Message">
+        <input type="submit" name="submit" class="submit">
       </form>
       
       <form id="newroom">
@@ -42,11 +42,11 @@
       <div id="chats"></div>
       <script>
         // fully-featured solution: 
-        // $(app.init.bind(app));
+        $(app.init.bind(app));
         //simplified solution:
-        $(function() {
-          app.init();
-        });
+        // $(function() {
+        //   app.init();
+        // });
         // Bakbone implementation: 
         /*$(function() {
           var messages = new Messages();

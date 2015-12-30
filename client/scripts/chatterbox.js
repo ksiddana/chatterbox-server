@@ -8,7 +8,8 @@ $(function() {
   app = {
 //TODO: The current 'addFriend' function just adds the class 'friend'
 //to all messages sent by the user
-    server: 'http://127.0.0.1:3000/',
+    // server: 'http://127.0.0.1:3000/classes/chatterbox',
+    server: 'http://127.0.0.1:3000',
     username: 'anonymous',
     roomname: 'lobby',
     lastMessageId: 0,
@@ -31,14 +32,14 @@ $(function() {
       app.$roomSelect.on('change', app.saveRoom);
 
       // Fetch previous messages
-      app.startSpinner();
+      // app.startSpinner();
       app.fetch(false);
 
       // Poll for new messages
-      // setInterval(app.fetch, 3000);
+      setInterval(app.fetch, 3000);
     },
     send: function(data) {
-      app.startSpinner();
+      // app.startSpinner();
       // Clear messages input
       app.$message.val('');
 
@@ -63,7 +64,7 @@ $(function() {
         url: app.server,
         type: 'GET',
         contentType: 'application/json',
-        data: {},
+        data: {order: "-createdAt"},
         success: function(data) {
           console.log('chatterbox: Messages fetched');
 
@@ -73,7 +74,7 @@ $(function() {
           // Get the last message
           var mostRecentMessage = data.results[data.results.length-1];
           var displayedRoom = $('.chat span').first().data('roomname');
-          app.stopSpinner();
+          // app.stopSpinner();
           // Only bother updating the DOM if we have a new message
           if (mostRecentMessage.objectId !== app.lastMessageId || app.roomname !== displayedRoom) {
             // Update the UI with the fetched rooms
@@ -98,7 +99,7 @@ $(function() {
       // Clear existing messages
 
       app.clearMessages();
-      app.stopSpinner();
+      // app.stopSpinner();
       if (Array.isArray(results)) {
         // Add all fetched messages
         results.forEach(app.addMessage);
@@ -164,7 +165,7 @@ $(function() {
         $message.text(data.text).appendTo($chat);
 
         // Add the message to the UI
-        app.$chats.append($chat);
+        app.$chats.prepend($chat);
       }
     },
     addFriend: function(evt) {
@@ -203,7 +204,7 @@ $(function() {
         }
       }
       else {
-        app.startSpinner();
+        // app.startSpinner();
         // Store as undefined for empty names
         app.roomname = app.$roomSelect.val();
 
@@ -222,15 +223,15 @@ $(function() {
 
       // Stop the form from submitting
       evt.preventDefault();
-    },
-    startSpinner: function(){
-      $('.spinner img').show();
-      $('form input[type=submit]').attr('disabled', "true");
-    },
-
-    stopSpinner: function(){
-      $('.spinner img').fadeOut('fast');
-      $('form input[type=submit]').attr('disabled', null);
     }
+    // startSpinner: function(){
+    //   $('.spinner img').show();
+    //   $('form input[type=submit]').attr('disabled', "true");
+    // },
+
+    // stopSpinner: function(){
+    //   $('.spinner img').fadeOut('fast');
+    //   $('form input[type=submit]').attr('disabled', null);
+    // }
   };
 }());
